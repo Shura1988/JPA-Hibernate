@@ -1,9 +1,9 @@
 package servlet;
 
-import dao.DaoImpl;
 import models.Adress;
 import models.Role;
 import models.User;
+import service.ServiceDaoImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,17 +12,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+
 
 @WebServlet("/use")
 public class MyServlet extends HttpServlet {
-    DaoImpl service = new DaoImpl();
+    ServiceDaoImpl service = new ServiceDaoImpl();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         Integer id = service.showId(login, password);
-        //service.userId(id).getRole().getTitle();
         if (service.userId(id).getRole().getTitle().equals("Admin")) {
             req.setAttribute("user", service.findAll());
             RequestDispatcher dispatcher = req.getRequestDispatcher("/ListUserForm.jsp");
