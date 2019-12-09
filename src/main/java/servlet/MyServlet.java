@@ -3,7 +3,8 @@ package servlet;
 import models.Adress;
 import models.Role;
 import models.User;
-import service.ServiceDaoImpl;
+import service.Service;
+import service.ServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,19 +17,31 @@ import java.io.IOException;
 
 @WebServlet("/use")
 public class MyServlet extends HttpServlet {
-    ServiceDaoImpl service = new ServiceDaoImpl();
+    Service service = new ServiceImpl();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        RequestDispatcher dispatcher = null;
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        Integer id = service.showId(login, password);
-        if (service.userId(id).getRole().getTitle().equals("Admin")) {
-            req.setAttribute("user", service.findAll());
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/ListUserForm.jsp");
+        User user;
+        try {
+            user = service.showUser(login, password);
+            if (user.getRole().getTitle().equals("Admin")) {
+                req.setAttribute("user", service.findAll());
+                dispatcher = req.getRequestDispatcher("/ListUserForm.jsp");
+                dispatcher.forward(req, resp);
+            } else if (user.getRole().getTitle().equals("user")) {
+                req.setAttribute("user", service.showUser(login, password));
+                 dispatcher = req.getRequestDispatcher("/listOne.jsp");
+                dispatcher.forward(req, resp);
+            }
+        }catch (Exception e){
+            req.setAttribute("message", " login or password is incorrect");
+             dispatcher = req.getRequestDispatcher("/error.jsp");
             dispatcher.forward(req, resp);
-        } else {
-            req.setAttribute("user", service.userId(id));
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/listOne.jsp");
+        }
+        if (dispatcher != null) {
             dispatcher.forward(req, resp);
         }
     }
@@ -36,8 +49,15 @@ public class MyServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = new User();
-        Adress adress = new Adress();
+//        User user = new User();
+//        Adress adress = new Adress();
+        if( service.checkLogin(req.getParameter("login"))){
+            req.setAttribute("message","Login out");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/error.jsp");
+            dispatcher.forward(req,resp);
+        } else {
+            User user = new User();
+            Adress adress = new Adress();
         user.setLogin(req.getParameter("login"));
         user.setPassword(req.getParameter("password"));
         user.setAge(Integer.parseInt(req.getParameter("age")));
@@ -52,11 +72,15 @@ public class MyServlet extends HttpServlet {
         role.addUsers(user);
         user.setRole(role);
         service.saveUser(user);
+      }
         resp.sendRedirect("/enterAccount.jsp");
     }
-
+//reddirect
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
+
         int id = Integer.parseInt(req.getParameter("id"));
         User user = service.userId(id);
         user.setId(Integer.parseInt(req.getParameter("id")));

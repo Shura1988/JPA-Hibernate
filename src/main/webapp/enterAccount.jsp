@@ -9,10 +9,10 @@
 <h1>Login</h1>
 <form action="/use" method="get">
     Login:<br>
-    <input type="text" name="login">
+    <input type="text" name="login" placeholder="${message}">
     <br><br>
     Password:<br>
-    <input type="text" name="password">
+    <input type="text" name="password" placeholder="password">
     <br><br>
     <form action="listOne.jsp">
     <input type="submit" value="Войти"/>

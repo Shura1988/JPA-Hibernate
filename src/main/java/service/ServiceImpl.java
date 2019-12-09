@@ -6,7 +6,7 @@ import models.User;
 
 import java.util.List;
 
-public class ServiceDaoImpl implements DAO {
+public class ServiceImpl implements Service {
     DAO use = new DaoImpl();
 
     @Override
@@ -35,7 +35,14 @@ public class ServiceDaoImpl implements DAO {
     }
 
     @Override
-    public Integer showId(String login, String password) {
-        return use.showId(login, password);
+    public User showUser(String login, String password) {
+        return use.showUser(login, password);
     }
+
+    @Override
+    public  boolean checkLogin(String login) {
+        return use.checkLogin(login);
+    }
+
+
 }

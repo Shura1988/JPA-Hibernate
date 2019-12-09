@@ -14,7 +14,7 @@
             <br>
             Password : <input type="text" name="password" value="${param.password}}" placeholder=${param.password}><br>
             <br>
-            Age: <input type="text" name="age" value="${param.age}" placeholder=${param.age}><br>
+            Age: <input type="number" size="3" name="age" min="1" max="120" value="${param.age}" placeholder=${param.age}><br>
             <br>
             Name : <input type="text" name="name" value="${param.name}" placeholder=${param.name}><br>
             <br>
@@ -36,6 +36,7 @@
             <br>
             <input type="hidden" name="_method" value="put">
             <input type="submit" value="Обновить">
+            <button onclick="location.href='/enterAccount.jsp'" size="45"> Exit </button>
         </form>
     </div>
 

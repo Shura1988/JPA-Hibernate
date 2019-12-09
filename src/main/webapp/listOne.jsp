@@ -56,6 +56,7 @@
             </td>
         </tr>
     </table>
+    <button onclick="location.href='/enterAccount.jsp'" size="45"> Exit </button>
 
 </div>
 </body>

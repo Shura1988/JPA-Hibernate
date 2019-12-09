@@ -53,11 +53,13 @@
                     <form action="deleteUser.jsp" method="post">
                         <input type="hidden" name="id" value="${user.getId()}">
                         <input type="submit" value="delete" style="float:left">
+
                     </form>
                 </td>
             </tr>
         </c:forEach>
     </table>
+    <button onclick="location.href='/enterAccount.jsp'" size="45"> Exit </button>
 </div>
 </body>
 </html>
